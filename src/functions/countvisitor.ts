@@ -2,12 +2,18 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/fu
 
 export async function countVisitor(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
-    const name = request.query.get('name') || await request.text() || 'world';
-    const ip = request.headers["x-forwarded-for"] || request.headers["x-client-ip"] || "Unknown IP";
-    context.log(`Client IP: ${ip}`, JSON.stringify(request.headers));
-    return { body: `Hello, ${name}! Your IP address is ${ip}.`};
 
+    // Log all headers
+    const headers = request.headers || {};
+    context.log("All Headers:", JSON.stringify(headers));
 
+    // Try to extract the IP address
+    const ip = headers["x-forwarded-for"]?.split(',')[0] || headers["x-client-ip"] || "Unknown IP";
+    context.log(`Client IP: ${ip}`);
+
+    return {
+        body: `Hello, world! Your IP address is ${ip}. Headers: ${JSON.stringify(headers)}`
+    };
 };
 
 app.http('count-visitor', {
