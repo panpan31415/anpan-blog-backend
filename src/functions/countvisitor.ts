@@ -10,9 +10,9 @@ export async function countVisitor(request: HttpRequest, context: InvocationCont
 
     // Try to extract the IP address
     const ip = request.headers["X-Forwarded-For"] || request.headers["x-client-ip"] || "Unknown IP";    context.log(`Client IP: ${ip}`);
-
+    context.log(request.headers.keys())
     return {
-        body: `Hello, world! Your IP address is ${ip}. entries: ${JSON.stringify(request.headers.entries())}`
+        body: `Hello, world! Your IP address is ${ip}. request: ${JSON.stringify(request)}`
     };
 };
 
