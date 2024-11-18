@@ -11,7 +11,7 @@ export async function countVisitor(request: HttpRequest, context: InvocationCont
     const ip = request.headers["X-Forwarded-For"] || request.headers["x-client-ip"] || "Unknown IP";    context.log(`Client IP: ${ip}`);
 
     return {
-        body: `Hello, world! Your IP address is ${ip}. Headers: ${JSON.stringify(headers)}`
+        body: `Hello, world! Your IP address is ${ip}. request: ${JSON.stringify(request)}`
     };
 };
 
