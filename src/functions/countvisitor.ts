@@ -55,8 +55,12 @@ export async function countVisitor(request: HttpRequest, context: InvocationCont
           visitCount:1
         }
       }else{
-        newRecord.lastVisitAt=now;
-        newRecord.visitCount+=1   
+        const timeDiff = new Date(now).getTime() - new Date(newRecord.lastVisitAt).getTime();
+        const ONE_MINUTE = 60 * 1000;
+        if(timeDiff>ONE_MINUTE){
+          newRecord.visitCount+=1   
+        }
+        newRecord.lastVisitAt=now;       
       }
       await Promise.all([
         container.items.upsert(newVisitors),
