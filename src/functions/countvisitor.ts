@@ -45,7 +45,6 @@ export async function countVisitor(request: HttpRequest, context: InvocationCont
     try {
       const {resource:visitors} =await container.item("visitors","visitors").read();
       let newVisitors = visitors || { id: "visitors", totalCount: 0};
-      newVisitors.totalCount += 1;
       const {resource:record} = await container.item(ip,ip).read();
       let newRecord = record
       if(!record){
@@ -58,6 +57,7 @@ export async function countVisitor(request: HttpRequest, context: InvocationCont
         const timeDiff = new Date(now).getTime() - new Date(newRecord.lastVisitAt).getTime();
         const ONE_MINUTE = 60 * 1000;
         if(timeDiff>ONE_MINUTE){
+          newVisitors.totalCount += 1;
           newRecord.visitCount+=1   
         }
         newRecord.lastVisitAt=now;       
